@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using DataAccess.Data;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace TaxiDispacher.Services.Hosted
@@ -7,9 +8,12 @@ namespace TaxiDispacher.Services.Hosted
     {
         private readonly UserService _authService;
         private Timer? _timer = null;
+        private readonly IUserRepository _userRepository;
 
-        public DispatchOrderService(IServiceScopeFactory scopeFactory)
+        public DispatchOrderService(IUserRepository userRepository)
         {
+            _userRepository = userRepository;
+
             //_authService = scopeFactory.CreateScope().ServiceProvider.GetRequiredService<AuthService>();
 
         }
@@ -23,7 +27,7 @@ namespace TaxiDispacher.Services.Hosted
 
         private void ExecuteTask(object? state)
         {
-
+            System.Diagnostics.Debug.WriteLine("Dispatcher running" + _userRepository.Get(1).Result.Username);
         }
 
         public Task StopAsync(CancellationToken stoppingToken)

@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace TaxiDispacher.DTO;
+namespace TaxiDispacher.Controllers.Forms;
 
-public class AuthPasswordForm
+public class UserPasswordForm
 {
     [Required]
     [MinLength(8)]
