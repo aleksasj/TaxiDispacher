@@ -27,7 +27,7 @@ namespace TaxiDispacher.Services.Hosted
 
         private void ExecuteTask(object? state)
         {
-            System.Diagnostics.Debug.WriteLine("Dispatcher running" + _userRepository.Get(1).Result.Username);
+            //System.Diagnostics.Debug.WriteLine("Dispatcher running" + _userRepository.Get(1).Result.Username);
         }
 
         public Task StopAsync(CancellationToken stoppingToken)
