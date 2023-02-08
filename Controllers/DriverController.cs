@@ -20,7 +20,25 @@ namespace TaxiDispacher.Controllers
         {
             //var list  await _driverService.getOrders(filter);
 
-            return  Ok();
+            return Ok();
+        }
+
+        [Authorize(Roles = UsersModel.ROLE_DRIVER)]
+        [HttpPost("StopWorking")]
+        async public Task<IActionResult> StopWorking()
+        {
+            //var list  await _driverService.getOrders(filter);
+
+            return Ok();
+        }
+
+        [Authorize(Roles = UsersModel.ROLE_DRIVER)]
+        [HttpGet("Orders")]
+        async public Task<IActionResult> StartWorking()
+        {
+            //var list  await _driverService.getOrders(filter);
+
+            return Ok();
         }
     }
 
