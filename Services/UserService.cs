@@ -56,12 +56,12 @@ public class UserService : IUserService
         return false;
     }
 
-    public async Task<bool> Create(string username, string password, string role)
+    public async Task<bool> Create(string username, string password)
     {
         password = Crypt.Encrypt(password, _securitySalt);
         try
         {
-            await _userRepository.Create(username, password, role);
+            await _userRepository.Create(username, password);
 
             return true;
         } catch (Exception ex)
@@ -97,5 +97,5 @@ public interface IUserService
     public UsersModel? GetUser();
     public Task<string?> getToken(string username, string password);
     public Task<bool> ChangePassword(string oldPassword, string newPassword);
-    public Task<bool> Create(string username, string password, string role);
+    public Task<bool> Create(string username, string password);
 }
