@@ -18,11 +18,14 @@ namespace TaxiDispacher
 
             builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
             builder.Services.AddSingleton<IUserRepository, UserRepository>();
+            builder.Services.AddSingleton<IDriverRepository, DriverRepository>();
             builder.Services.AddSingleton<IOrderRepository, OrderRepository>();
 
             builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddSingleton<IUserService, UserService>();
+            builder.Services.AddSingleton<IDriverService, DriverService>();
+
             builder.Services.AddHostedService<DispatchOrderService>();
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
