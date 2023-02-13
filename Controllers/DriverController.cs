@@ -13,7 +13,7 @@ public class DriverController : ControllerBase
     public DriverController(IDriverService driverService)
     {
         _driverService = driverService;
-    }  
+    }
 
     [Authorize(Roles = UsersModel.ROLE_DRIVER)]
     [HttpPost("Location")]
@@ -26,10 +26,11 @@ public class DriverController : ControllerBase
 
     [Authorize(Roles = UsersModel.ROLE_DRIVER)]
     [HttpGet("Orders")]
-    async public Task<IActionResult> Orders()
+    async public Task<IActionResult> Orders(int page = 1, int[] status = null, int perPage = 10)
     {
-        bool success = true;
-        return success ? Ok() : NotFound();
+        var result = await _driverService.GetOrders(page, status, perPage);
+
+        return Ok(result);
     }
 
     [Authorize(Roles = UsersModel.ROLE_DRIVER)]
