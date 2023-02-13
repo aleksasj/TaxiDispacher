@@ -25,6 +25,7 @@ namespace TaxiDispacher
 
             builder.Services.AddSingleton<IUserService, UserService>();
             builder.Services.AddSingleton<IDriverService, DriverService>();
+            builder.Services.AddSingleton<IOrderService, OrderService>();
 
             builder.Services.AddHostedService<DispatchOrderService>();
             builder.Services.AddControllers();

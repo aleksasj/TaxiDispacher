@@ -11,13 +11,15 @@ public class UserService : IUserService
     private readonly IConfiguration _config;
     private readonly IUserRepository _userRepository;
     private readonly IHttpContextAccessor _request;
+    private readonly Logger<UserService> _logger;
     private string? _securitySalt = string.Empty;
 
-    public UserService(IConfiguration config, IUserRepository userRepository, IHttpContextAccessor request) 
+    public UserService(IConfiguration config, Logger<UserService> logger, IUserRepository userRepository, IHttpContextAccessor request) 
     {
         _config = config;
         _userRepository = userRepository;
         _request = request;
+        _logger = logger;
         _securitySalt = _config["Salt"];
     }
     public UsersModel? GetUser()
@@ -66,6 +68,7 @@ public class UserService : IUserService
             return true;
         } catch (Exception ex)
         {
+            _logger.LogError(ex.Message);
             return false;
         }
     }

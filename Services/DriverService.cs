@@ -6,9 +6,11 @@ public class DriverService : IDriverService
     private readonly IUserService _userService;
     private readonly IDriverRepository _driverRepository;
     private readonly IOrderRepository _orderRepository;
+    private readonly Logger<DriverService> _logger;
 
-    public DriverService(IConfiguration config, IUserService userService, IDriverRepository driverRepository, IOrderRepository orderRepository)
+    public DriverService(IConfiguration config, Logger<DriverService> logger, IUserService userService, IDriverRepository driverRepository, IOrderRepository orderRepository)
     {
+        _logger = logger;
         _config = config;
         _userService = userService;
         _driverRepository = driverRepository;
@@ -34,6 +36,7 @@ public class DriverService : IDriverService
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex.Message);
             return false;
         }
     }
@@ -46,6 +49,7 @@ public class DriverService : IDriverService
             return true;
         } catch (Exception ex)
         {
+            _logger.LogError(ex.Message);
             return false;
         }
     }
