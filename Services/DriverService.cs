@@ -6,9 +6,9 @@ public class DriverService : IDriverService
     private readonly IUserService _userService;
     private readonly IDriverRepository _driverRepository;
     private readonly IOrderRepository _orderRepository;
-    private readonly Logger<DriverService> _logger;
+    private readonly ILogger<DriverService> _logger;
 
-    public DriverService(IConfiguration config, Logger<DriverService> logger, IUserService userService, IDriverRepository driverRepository, IOrderRepository orderRepository)
+    public DriverService(IConfiguration config, ILogger<DriverService> logger, IUserService userService, IDriverRepository driverRepository, IOrderRepository orderRepository)
     {
         _logger = logger;
         _config = config;

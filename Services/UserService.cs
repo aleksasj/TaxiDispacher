@@ -11,10 +11,10 @@ public class UserService : IUserService
     private readonly IConfiguration _config;
     private readonly IUserRepository _userRepository;
     private readonly IHttpContextAccessor _request;
-    private readonly Logger<UserService> _logger;
+    private readonly ILogger<UserService> _logger;
     private string? _securitySalt = string.Empty;
 
-    public UserService(IConfiguration config, Logger<UserService> logger, IUserRepository userRepository, IHttpContextAccessor request) 
+    public UserService(IConfiguration config, ILogger<UserService> logger, IUserRepository userRepository, IHttpContextAccessor request) 
     {
         _config = config;
         _userRepository = userRepository;
