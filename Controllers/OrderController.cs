@@ -13,7 +13,6 @@ namespace TaxiDispacher.Controllers
         public OrderController(IOrderService orderService)
         {
             _orderService = orderService;
-
         }
 
         [HttpPost("Create")]
@@ -25,7 +24,7 @@ namespace TaxiDispacher.Controllers
         }
 
         [HttpGet("Detail")]
-        async public Task<IActionResult> Get([FromForm] int orderId)
+        async public Task<IActionResult> Get(int orderId)
         {
             var result = await _orderService.Details(orderId);
 

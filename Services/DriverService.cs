@@ -1,5 +1,12 @@
 ﻿namespace TaxiDispacher.Services;
 
+public interface IDriverService
+{
+    Task AddLocation(float latitude, float longitude);
+    Task<bool> StartWorking();
+    Task<bool> StopWorking();
+    Task<IEnumerable<OrdersModel>> GetOrders(int page = 1, int[] status = null, int perPage = 10);
+}
 public class DriverService : IDriverService
 {
     private readonly IConfiguration _config;
@@ -53,12 +60,4 @@ public class DriverService : IDriverService
             return false;
         }
     }
-}
-
-public interface IDriverService
-{
-    Task AddLocation(float latitude, float longitude);
-    Task<bool> StartWorking();
-    Task<bool> StopWorking();
-    Task<IEnumerable<OrdersModel>> GetOrders(int page = 1, int[] status = null, int perPage = 10);
 }

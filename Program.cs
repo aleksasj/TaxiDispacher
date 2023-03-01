@@ -18,6 +18,7 @@ namespace TaxiDispacher
 
             builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
             builder.Services.AddSingleton<IUserRepository, UserRepository>();
+            builder.Services.AddSingleton<IAddressRepository, AddressRepository>();
             builder.Services.AddSingleton<IDriverRepository, DriverRepository>();
             builder.Services.AddSingleton<IOrderRepository, OrderRepository>();
 

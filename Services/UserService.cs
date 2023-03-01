@@ -6,6 +6,14 @@ using TaxiDispacher.Helpers;
 
 namespace TaxiDispacher.Services;
 
+public interface IUserService
+{
+    public UsersModel? GetUser();
+    public Task<string?> GetToken(string username, string password);
+    public Task<bool> ChangePassword(string oldPassword, string newPassword);
+    public Task<bool> Create(string username, string password);
+}
+
 public class UserService : IUserService
 {
     private readonly IConfiguration _config;
@@ -38,7 +46,7 @@ public class UserService : IUserService
         return null;
     }
 
-    async public Task<string?> getToken(string username, string password)
+    async public Task<string?> GetToken(string username, string password)
     {
         password = Crypt.Encrypt(password, _securitySalt);
         var user = await _userRepository.GetUserByCredentials(username, password);
@@ -53,6 +61,7 @@ public class UserService : IUserService
             newPassword = Crypt.Encrypt(newPassword, _securitySalt);
             await _userRepository.ChangePassword(GetUser().Id, newPassword);
             return true;
+           
         }
 
         return false;
@@ -64,7 +73,6 @@ public class UserService : IUserService
         try
         {
             await _userRepository.Create(username, password);
-
             return true;
         } catch (Exception ex)
         {
@@ -93,12 +101,4 @@ public class UserService : IUserService
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
-}
-
-public interface IUserService
-{
-    public UsersModel? GetUser();
-    public Task<string?> getToken(string username, string password);
-    public Task<bool> ChangePassword(string oldPassword, string newPassword);
-    public Task<bool> Create(string username, string password);
 }

@@ -20,7 +20,7 @@ namespace TaxiDispacher.Controllers
         [HttpPost("Login")]
         public async Task<IActionResult> Login(string username, string password)
         {
-            var token = await _userService.getToken(username, password);
+            var token = await _userService.GetToken(username, password);
 
             return token == null ? NotFound() : Ok(token);
         }

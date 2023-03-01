@@ -17,7 +17,7 @@ public class DriverController : ControllerBase
 
     [Authorize(Roles = UsersModel.ROLE_DRIVER)]
     [HttpPost("Location")]
-    async public Task<IActionResult> ShareLocation(float longitude, float latitude)
+    async public Task<IActionResult> ShareLocation([FromForm] float longitude, [FromForm] float latitude)
     {
         await _driverService.AddLocation(longitude, latitude);
 
