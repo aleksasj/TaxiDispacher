@@ -27,6 +27,7 @@ namespace TaxiDispacher.Services.Hosted
 
         private void ExecuteTask(object? state)
         {
+            Console.Beep();
             //System.Diagnostics.Debug.WriteLine("Dispatcher running" + _userRepository.Get(1).Result.Username);
         }
 

@@ -5,7 +5,7 @@ namespace TaxiDispacher.Services;
 
 public interface IOrderService
 {
-    Task<bool> Create(OrderCreateForm order);
+    Task<OrderListModel?> Create(OrderCreateForm order);
     Task<bool> Assign(int orderId, int? driverId = null);
     Task<bool> Cancel(int orderId);
     Task<OrderListModel?> Details(int orderId);
@@ -58,14 +58,22 @@ public class OrderService : IOrderService
         }
     }
 
-    public async Task<bool> Create(OrderCreateForm order)
+    public async Task<OrderListModel?> Create(OrderCreateForm order)
     {
-        var pk = await _addressRepository.Create("5assdasfasfgsdfhfghgfasf44f56h4", 1.2464525f, 344.5363464636f);
+        try
+        {
+            var pickupAddress = await _addressRepository.GetOrCreate(order.Pickup.Title, order.Pickup.Longitude, order.Pickup.Latitude);
+            var destinationAddress = await _addressRepository.GetOrCreate(order.Destination.Title, order.Destination.Longitude, order.Destination.Latitude);
 
+            var orderData = await _orderRepository.Create(order.Name, order.Phone, pickupAddress.Id, destinationAddress.Id, order.Comment);
 
-        // _orderRepository.Ce*/
+            return orderData;
+        } catch(Exception e)
+        {
+            _logger.LogError(e.Message);
+        }
 
-        return true;
+        return null;
     }
 
     public async Task<OrderListModel?> Details(int orderId) => await _orderRepository.Detail(orderId);

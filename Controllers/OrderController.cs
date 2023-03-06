@@ -18,9 +18,9 @@ namespace TaxiDispacher.Controllers
         [HttpPost("Create")]
         async public Task<IActionResult> Post([FromBody] OrderCreateForm order)
         {
-            bool result = await _orderService.Create(order);
+            var result = await _orderService.Create(order);
 
-            return result ? Ok() : BadRequest();
+            return result != null ? Ok() : BadRequest();
         }
 
         [HttpGet("Detail")]
