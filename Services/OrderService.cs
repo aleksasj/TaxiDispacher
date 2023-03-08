@@ -65,7 +65,7 @@ public class OrderService : IOrderService
 
             await _orderRepository.Assign(item.Id, firstDriver.Id);
             _logger.LogInformation("Driver " + firstDriver.Id + " was assigned for " + item.Id);
-            _logger.LogInformation("total available driver count for this order:" + availableDrivers.Count());
+            _logger.LogInformation("Total available driver count for this order:" + availableDrivers.Count());
         }
     }
 
