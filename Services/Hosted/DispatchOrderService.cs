@@ -6,16 +6,12 @@ namespace TaxiDispacher.Services.Hosted
 {
     public class DispatchOrderService : IHostedService, IDisposable
     {
-        private readonly UserService _authService;
         private Timer? _timer = null;
-        private readonly IUserRepository _userRepository;
+        private readonly IOrderService _orderService;
 
-        public DispatchOrderService(IUserRepository userRepository)
+        public DispatchOrderService(IOrderService orderService)
         {
-            _userRepository = userRepository;
-
-            //_authService = scopeFactory.CreateScope().ServiceProvider.GetRequiredService<AuthService>();
-
+            _orderService = orderService;
         }
 
         public Task StartAsync(CancellationToken stoppingToken)
@@ -27,8 +23,8 @@ namespace TaxiDispacher.Services.Hosted
 
         private void ExecuteTask(object? state)
         {
-            Console.Beep();
-            //System.Diagnostics.Debug.WriteLine("Dispatcher running" + _userRepository.Get(1).Result.Username);
+            _orderService.AssignForAvailableDrivers();
+            _orderService.CancelPendingTooLong();
         }
 
         public Task StopAsync(CancellationToken stoppingToken)

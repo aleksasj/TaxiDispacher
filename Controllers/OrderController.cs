@@ -20,7 +20,7 @@ namespace TaxiDispacher.Controllers
         {
             var result = await _orderService.Create(order);
 
-            return result != null ? Ok() : BadRequest();
+            return result == null ? BadRequest() : Ok(result);
         }
 
         [HttpGet("Detail")]
