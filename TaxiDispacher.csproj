@@ -21,10 +21,4 @@
     <ProjectReference Include="..\DispatcherDB\DispatcherDB.sqlproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Update="appsettings.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
 </Project>
