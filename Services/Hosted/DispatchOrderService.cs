@@ -1,8 +1,4 @@
-﻿using DataAccess.Data;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-
-namespace TaxiDispacher.Services.Hosted
+﻿namespace TaxiDispacher.Services.Hosted
 {
     public class DispatchOrderService : IHostedService, IDisposable
     {
@@ -23,7 +19,7 @@ namespace TaxiDispacher.Services.Hosted
 
         private void ExecuteTask(object? state)
         {
-            _orderService.AssignForAvailableDrivers();
+            //  _orderService.AssignForAvailableDrivers();
             _orderService.CancelPendingTooLong();
         }
 

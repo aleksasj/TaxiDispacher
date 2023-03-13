@@ -5,7 +5,7 @@ public interface IDriverService
     Task AddLocation(float latitude, float longitude);
     Task<bool> StartWorking();
     Task<bool> StopWorking();
-    Task<IEnumerable<OrdersModel>> GetOrders(int page = 1, int[] status = null, int perPage = 10);
+    Task<IEnumerable<OrderListModel>> GetOrders(int page = 1, int[] status = null, int perPage = 10);
 }
 public class DriverService : IDriverService
 {
@@ -29,9 +29,16 @@ public class DriverService : IDriverService
         await _driverRepository.AddLocation(_userService.GetUser().Id, latitude, longitude);
     }
 
-    public async Task<IEnumerable<OrdersModel>> GetOrders(int page = 1, int[] status = null, int perPage = 10) 
-        => await _orderRepository.GetOrders(_userService.GetUser().Id, page, status, perPage);
+    public async Task<IEnumerable<OrderListModel>> GetOrders(int page = 1, int[] status = null, int perPage = 10)
+    {
+        int? driverId = _userService.GetUser().Id;
+        if (_userService.GetUser().Role == UsersModel.ROLE_ADMIN)
+        {
+            driverId = null;
+        }
 
+        return await _orderRepository.GetOrders(driverId, page, status, perPage);
+    }
 
     public async Task<bool> StartWorking()
     {
@@ -54,7 +61,8 @@ public class DriverService : IDriverService
             await _driverRepository.StopWorking(_userService.GetUser().Id);
 
             return true;
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             _logger.LogError(ex.Message);
             return false;

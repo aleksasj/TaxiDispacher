@@ -1,9 +1,9 @@
 
-using TaxiDispacher.Services;
+using DataAccess.DbAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using DataAccess.DbAccess;
+using TaxiDispacher.Services;
 using TaxiDispacher.Services.Hosted;
 
 namespace TaxiDispacher
@@ -33,7 +33,8 @@ namespace TaxiDispacher
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => {
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+            {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,

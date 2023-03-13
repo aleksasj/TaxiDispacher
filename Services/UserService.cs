@@ -22,7 +22,7 @@ public class UserService : IUserService
     private readonly ILogger<UserService> _logger;
     private string? _securitySalt = string.Empty;
 
-    public UserService(IConfiguration config, ILogger<UserService> logger, IUserRepository userRepository, IHttpContextAccessor request) 
+    public UserService(IConfiguration config, ILogger<UserService> logger, IUserRepository userRepository, IHttpContextAccessor request)
     {
         _config = config;
         _userRepository = userRepository;
@@ -34,7 +34,8 @@ public class UserService : IUserService
     {
         var currentUser = _request.HttpContext.User.Claims;
 
-        if (currentUser != null) {
+        if (currentUser != null)
+        {
             return new UsersModel()
             {
                 Id = Int32.Parse(currentUser.FirstOrDefault(u => u.Type == "UID").Value),
@@ -61,7 +62,7 @@ public class UserService : IUserService
             newPassword = Crypt.Encrypt(newPassword, _securitySalt);
             await _userRepository.ChangePassword(GetUser().Id, newPassword);
             return true;
-           
+
         }
 
         return false;
@@ -74,7 +75,8 @@ public class UserService : IUserService
         {
             await _userRepository.Create(username, password);
             return true;
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             _logger.LogError(ex.Message);
             return false;

@@ -40,8 +40,10 @@ public class OrderService : IOrderService
         try
         {
             await _orderRepository.Assign(orderId, (driverId != null ? driverId : _userService.GetUser().Id));
-            return true;    
-        } catch (Exception ex) {
+            return true;
+        }
+        catch (Exception ex)
+        {
             _logger.LogError(ex.Message);
             return false;
         }
@@ -76,7 +78,8 @@ public class OrderService : IOrderService
             await _orderRepository.Cancel(orderId);
             return true;
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             _logger.LogError(ex.Message);
             return false;
         }
@@ -94,7 +97,8 @@ public class OrderService : IOrderService
             var orderData = await _orderRepository.Create(order.Name, order.Phone, pickupAddress.Id, destinationAddress.Id, order.Comment);
 
             return orderData;
-        } catch(Exception e)
+        }
+        catch (Exception e)
         {
             _logger.LogError(e.Message);
         }
@@ -110,7 +114,9 @@ public class OrderService : IOrderService
         {
             await _orderRepository.Finish(orderId);
             return true;
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             _logger.LogError(ex.Message);
             return false;
         }

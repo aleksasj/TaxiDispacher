@@ -24,7 +24,7 @@ public class DriverController : ControllerBase
         return NoContent();
     }
 
-    [Authorize(Roles = UsersModel.ROLE_DRIVER)]
+    [Authorize(Roles = UsersModel.ROLE_DRIVER + "," + UsersModel.ROLE_ADMIN)]
     [HttpGet("Orders")]
     async public Task<IActionResult> Orders(int page = 1, int perPage = 10, int[] status = null)
     {
