@@ -3,6 +3,7 @@ using DataAccess.DbAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using TaxiDispacher.Filters;
 using TaxiDispacher.Services;
 using TaxiDispacher.Services.Hosted;
 
@@ -29,7 +30,12 @@ namespace TaxiDispacher
             builder.Services.AddSingleton<IOrderService, OrderService>();
 
             builder.Services.AddHostedService<DispatchOrderService>();
-            builder.Services.AddControllers();
+       
+            builder.Services.AddMvc(options =>
+             {
+                 options.Filters.Add(typeof(IPWhitelistFilter));
+             });
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 

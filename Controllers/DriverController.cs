@@ -26,7 +26,7 @@ public class DriverController : ControllerBase
 
     [Authorize(Roles = UsersModel.ROLE_DRIVER + "," + UsersModel.ROLE_ADMIN)]
     [HttpGet("Orders")]
-    async public Task<IActionResult> Orders(int page = 1, int perPage = 10, int[] status = null)
+    async public Task<IActionResult> Orders([FromQuery]int page = 1, [FromQuery] int perPage = 10, [FromQuery] int[]? status = null)
     {
         var result = await _driverService.GetOrders(page, status, perPage);
 

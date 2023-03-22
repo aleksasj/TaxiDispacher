@@ -19,5 +19,8 @@
   "ConnectionStrings": {
     "Default": "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=TaxiDispatcherDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False"
   },
-  "Salt": "salt for users :) "
+  "Salt": "salt for users :) ",
+  "WhitelistedIPs": [
+    "127.0.0.1"
+  ]
 }
