@@ -1,4 +1,5 @@
 
+using DataAccess;
 using DataAccess.DbAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -16,13 +17,7 @@ namespace TaxiDispacher
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
-            builder.Services.AddSingleton<ISqlDataAccess, SqlDataAccess>();
-            builder.Services.AddSingleton<IUserRepository, UserRepository>();
-            builder.Services.AddSingleton<IAddressRepository, AddressRepository>();
-            builder.Services.AddSingleton<IDriverRepository, DriverRepository>();
-            builder.Services.AddSingleton<IOrderRepository, OrderRepository>();
-
+            builder.Services.AddDataAccess();
             builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddSingleton<IUserService, UserService>();
@@ -31,10 +26,9 @@ namespace TaxiDispacher
 
             builder.Services.AddHostedService<DispatchOrderService>();
        
-            builder.Services.AddMvc(options =>
-             {
-                 options.Filters.Add(typeof(IPWhitelistFilter));
-             });
+            builder.Services.AddMvc(options => {
+                options.Filters.Add(typeof(IPWhitelistFilter));
+            });
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -54,7 +48,6 @@ namespace TaxiDispacher
             });
 
             var app = builder.Build();
-
             var scope = app.Services.CreateScope();
 
             // Configure the HTTP request pipeline.
@@ -66,7 +59,6 @@ namespace TaxiDispacher
 
             app.UseHttpsRedirection();
             app.UseAuthorization();
-
 
             app.MapControllers();
             app.Run();

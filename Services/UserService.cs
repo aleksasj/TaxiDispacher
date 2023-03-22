@@ -28,7 +28,7 @@ public class UserService : IUserService
         _userRepository = userRepository;
         _request = request;
         _logger = logger;
-        _securitySalt = _config["Salt"];
+        _securitySalt = _config.GetValue<String>("Salt");
     }
     public UsersModel? GetUser()
     {
