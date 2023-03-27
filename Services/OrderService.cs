@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.Extensions.Localization;
 using TaxiDispacher.Controllers.Forms;
 
 namespace TaxiDispacher.Services;
@@ -22,14 +23,15 @@ public class OrderService : IOrderService
     private readonly IAddressRepository _addressRepository;
     private readonly IDriverRepository _driverRepository;
     private readonly ILogger<OrderService> _logger;
+    private readonly IStringLocalizer<OrderService> _localizer;
     private readonly IConfiguration _config;
 
-
-    public OrderService(IConfiguration config, ILogger<OrderService> logger, IUserService userService, IOrderRepository orderRepository, IAddressRepository addressRepository, IDriverRepository driverRepository)
+    public OrderService(IConfiguration config, IStringLocalizer<OrderService> localizer, ILogger<OrderService> logger, IUserService userService, IOrderRepository orderRepository, IAddressRepository addressRepository, IDriverRepository driverRepository)
     {
         _config = config;
         _userService = userService;
         _logger = logger;
+        _localizer = localizer;
         _orderRepository = orderRepository;
         _addressRepository = addressRepository;
         _driverRepository = driverRepository;
@@ -106,8 +108,13 @@ public class OrderService : IOrderService
         return null;
     }
 
-    public async Task<OrderListModel?> Details(int orderId) => await _orderRepository.Detail(orderId);
+    public async Task<OrderListModel?> Details(int orderId) 
+    { 
+        var data =  await _orderRepository.Detail(orderId);
+        _logger.LogInformation("TRANSLATIONS WORKS: " + _localizer["test.keyword"]);
 
+        return data;
+    }
     public async Task<bool> Finish(int orderId)
     {
         try

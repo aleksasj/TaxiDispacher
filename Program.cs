@@ -1,9 +1,12 @@
 
 using DataAccess;
-using DataAccess.DbAccess;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System.Globalization;
 using System.Text;
+using TaxiDispacher.Extensions;
 using TaxiDispacher.Filters;
 using TaxiDispacher.Services;
 using TaxiDispacher.Services.Hosted;
@@ -15,6 +18,30 @@ namespace TaxiDispacher
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder => {
+                    builder.WithOrigins("https://one.lt")
+                           .AllowDefaultMethodsExtension("PATCH")
+                           .AllowAnyHeader();
+                });
+            });
+
+            var defaultCulture = new CultureInfo("en-US");
+            var supportedCultures = new[]
+            {
+                defaultCulture,
+                new CultureInfo("lt")
+            };
+
+            // Localization
+            builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+            builder.Services.Configure<RequestLocalizationOptions>(options => {
+                options.DefaultRequestCulture = new RequestCulture(defaultCulture.CompareInfo.Name);
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+            });
 
             // Add services to the container.
             builder.Services.AddDataAccess();
@@ -48,6 +75,7 @@ namespace TaxiDispacher
             });
 
             var app = builder.Build();
+
             var scope = app.Services.CreateScope();
 
             // Configure the HTTP request pipeline.
@@ -59,6 +87,9 @@ namespace TaxiDispacher
 
             app.UseHttpsRedirection();
             app.UseAuthorization();
+
+
+            app.UseRequestLocalization(app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
 
             app.MapControllers();
             app.Run();
