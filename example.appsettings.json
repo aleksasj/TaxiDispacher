@@ -5,6 +5,10 @@
       "Microsoft.AspNetCore": "Warning"
     }
   },
+  "kafka": {
+    "server": "localhost:9092",
+    "groupId": "test"
+  },
   "order": {
     "maxDistance": 10, // kilometers
     "maxOrderCount": 0, // current order count

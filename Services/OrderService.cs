@@ -22,11 +22,12 @@ public class OrderService : IOrderService
     private readonly IOrderRepository _orderRepository;
     private readonly IAddressRepository _addressRepository;
     private readonly IDriverRepository _driverRepository;
+    private readonly INotificationsService _notificationsService;
     private readonly ILogger<OrderService> _logger;
     private readonly IStringLocalizer<OrderService> _localizer;
     private readonly IConfiguration _config;
 
-    public OrderService(IConfiguration config, IStringLocalizer<OrderService> localizer, ILogger<OrderService> logger, IUserService userService, IOrderRepository orderRepository, IAddressRepository addressRepository, IDriverRepository driverRepository)
+    public OrderService(IConfiguration config, INotificationsService notificationsService, IStringLocalizer<OrderService> localizer, ILogger<OrderService> logger, IUserService userService, IOrderRepository orderRepository, IAddressRepository addressRepository, IDriverRepository driverRepository)
     {
         _config = config;
         _userService = userService;
@@ -35,6 +36,7 @@ public class OrderService : IOrderService
         _orderRepository = orderRepository;
         _addressRepository = addressRepository;
         _driverRepository = driverRepository;
+        _notificationsService = notificationsService;
     }
 
     public async Task<bool> Assign(int orderId, int? driverId = null)
@@ -42,6 +44,7 @@ public class OrderService : IOrderService
         try
         {
             await _orderRepository.Assign(orderId, (driverId != null ? driverId : _userService.GetUser().Id));
+            _notificationsService.OnOrderStatusChange(orderId, OrdersModel.STATUS_ASSIGNED);
             return true;
         }
         catch (Exception ex)
@@ -78,6 +81,8 @@ public class OrderService : IOrderService
         try
         {
             await _orderRepository.Cancel(orderId);
+            _notificationsService.OnOrderStatusChange(orderId, OrdersModel.STATUS_CANCELED);
+
             return true;
         }
         catch (Exception ex)
@@ -97,6 +102,7 @@ public class OrderService : IOrderService
             var destinationAddress = await _addressRepository.GetOrCreate(order.Destination.Title, order.Destination.Longitude, order.Destination.Latitude);
 
             var orderData = await _orderRepository.Create(order.Name, order.Phone, pickupAddress.Id, destinationAddress.Id, order.Comment);
+            _notificationsService.OnOrderCreated(orderData);
 
             return orderData;
         }
@@ -120,6 +126,8 @@ public class OrderService : IOrderService
         try
         {
             await _orderRepository.Finish(orderId);
+            _notificationsService.OnOrderStatusChange(orderId, OrdersModel.STATUS_FINISHED);
+
             return true;
         }
         catch (Exception ex)
@@ -134,6 +142,8 @@ public class OrderService : IOrderService
         try
         {
             await _orderRepository.Picked(orderId);
+            _notificationsService.OnOrderStatusChange(orderId, OrdersModel.STATUS_PICKED);
+
             return true;
         }
         catch (Exception ex)

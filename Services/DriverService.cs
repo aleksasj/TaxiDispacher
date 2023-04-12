@@ -1,4 +1,5 @@
-﻿namespace TaxiDispacher.Services;
+﻿
+namespace TaxiDispacher.Services;
 
 public interface IDriverService
 {
@@ -13,20 +14,25 @@ public class DriverService : IDriverService
     private readonly IUserService _userService;
     private readonly IDriverRepository _driverRepository;
     private readonly IOrderRepository _orderRepository;
+    private readonly INotificationsService _notificationsService;
     private readonly ILogger<DriverService> _logger;
 
-    public DriverService(IConfiguration config, ILogger<DriverService> logger, IUserService userService, IDriverRepository driverRepository, IOrderRepository orderRepository)
+
+    public DriverService(IConfiguration config, INotificationsService notificationsService, ILogger<DriverService> logger, IUserService userService, IDriverRepository driverRepository, IOrderRepository orderRepository)
     {
         _logger = logger;
         _config = config;
         _userService = userService;
         _driverRepository = driverRepository;
         _orderRepository = orderRepository;
+        _notificationsService = notificationsService;
     }
 
     public async Task AddLocation(float latitude, float longitude)
     {
-        await _driverRepository.AddLocation(_userService.GetUser().Id, latitude, longitude);
+        int id = _userService.GetUser().Id;
+        await _driverRepository.AddLocation(id, latitude, longitude);
+        _notificationsService.OnDriverLocationChange(id, latitude, longitude);
     }
 
     public async Task<IEnumerable<OrderListModel>> GetOrders(int page = 1, int[] status = null, int perPage = 10)
@@ -44,8 +50,9 @@ public class DriverService : IDriverService
     {
         try
         {
-            await _driverRepository.StartWorking(_userService.GetUser().Id);
-
+            int id = _userService.GetUser().Id;
+            await _driverRepository.StartWorking(id);
+            _notificationsService.OnDriverStatusChange(id, true);
             return true;
         }
         catch (Exception ex)
@@ -58,8 +65,9 @@ public class DriverService : IDriverService
     {
         try
         {
-            await _driverRepository.StopWorking(_userService.GetUser().Id);
-
+            int id = _userService.GetUser().Id;
+            await _driverRepository.StopWorking(id);
+            _notificationsService.OnDriverStatusChange(id, false);
             return true;
         }
         catch (Exception ex)

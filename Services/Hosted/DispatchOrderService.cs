@@ -4,10 +4,12 @@
     {
         private Timer? _timer = null;
         private readonly IOrderService _orderService;
+        private readonly ILogger<DispatchOrderService> _logger;
 
-        public DispatchOrderService(IOrderService orderService)
+        public DispatchOrderService(IOrderService orderService, ILogger<DispatchOrderService> logger)
         {
             _orderService = orderService;
+            _logger = logger;
         }
 
         public Task StartAsync(CancellationToken stoppingToken)
@@ -19,7 +21,7 @@
 
         private void ExecuteTask(object? state)
         {
-            //  _orderService.AssignForAvailableDrivers();
+            //_orderService.AssignForAvailableDrivers();
             _orderService.CancelPendingTooLong();
         }
 
