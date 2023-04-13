@@ -1,4 +1,5 @@
 ﻿using Confluent.Kafka;
+using Serilog;
 using System.Diagnostics;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -31,7 +32,7 @@ public class ApacheKafkaConsumerService : IHostedService
 
         task = Task.Run(() => ExecuteTaskAsync(_config));
 
-        return Task.CompletedTask;
+        return task;
     }
 
     private async Task ExecuteTaskAsync(ConsumerConfig config)
@@ -79,6 +80,8 @@ public class ApacheKafkaConsumerService : IHostedService
         task?.Dispose();
 
         _logger.LogInformation("Consumer kafka stoped");
+
         return Task.CompletedTask;
     }
+
 }

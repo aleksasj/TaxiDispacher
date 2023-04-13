@@ -13,6 +13,7 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+
         builder.Services.AddDataAccess();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddLogging(loggingBuilder => {
@@ -23,7 +24,8 @@ public class Program
                 .WriteTo.File("log.txt", rollingInterval: RollingInterval.Day)
                 .WriteTo.Console( outputTemplate: "{Timestamp:HH:mm} [{Level}] ({ThreadId}) {Message}{NewLine}{Exception}")
                 .CreateLogger());
-         });
+        });
+
         builder.Services.AddSingleton<IUserService, UserService>();
         builder.Services.AddSingleton<IDriverService, DriverService>();
         builder.Services.AddSingleton<IOrderService, OrderService>();
